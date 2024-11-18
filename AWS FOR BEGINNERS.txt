@@ -1,0 +1,346 @@
+						AWS FOR BEGINNERS
+						===================
+
+TOPICS COVERED
+-----------------------------
+-Introduction to AWS
+-IAM
+-EC2
+-S3 Basics
+-Database Services
+-Other Services : Cloud Watch, Elastic load balancing, Auto scaling, AWS lambda
+
+---------------------------------------------------------------------------------------------------------------------------------
+INTRODUCTION:
+---------------------------
+-AWS stands for Amazon Web Services
+-Amazon Web Services (AWS) is a comprehensive and widely adopted cloud computing platform provided by Amazon.
+
+IaaS
+------
+-IaaS stands fir Infrastructure as Service.
+-Infrastructure as a Service (IaaS) is one of the three main categories of cloud computing services, alongside PaaS (Platform as a Service) and SaaS (Software as a Service).
+- IaaS provides users with virtualized computing resources over the internet, enabling them to rent IT infrastructure such as servers, storage, and networking hardware without having to own or manage physical data centers.
+-This model is highly scalable, cost-effective, and flexible, making it an attractive choice for businesses that want to focus on their core operations while leaving infrastructure management to cloud providers.
+-AWS offers a comprehensive IaaS portfolio through services like Amazon EC2 (Elastic Compute Cloud) for compute, Amazon S3 for storage, and Amazon VPC for networking.
+
+#Common Use Cases for IaaS:
+-------------------------------------------
+-Hosting Websites and Web Applications
+-Data Storage and Backup
+-Big Data Analytics
+-Disaster Recovery
+-Development and Testing Environment
+-Running Virtual Desktops (VDI)
+
+*IaaS (Infrastructure as a Service) is like renting a computer or a whole data center from a cloud provider instead of buying and maintaining your own. You get access to things like virtual computers (called virtual machines), storage (for saving files and data), and networks (for connecting these systems) — all through the internet. You only pay for what you use, and you don’t need to worry about buying hardware or managing it.
+
+#Services offered by AWS
+------------------------------------
+S3 : Simple Storage Services
+EC2: Elastic Compute Cloud
+ELB: Elastic Load Balancer
+Cloud Watch: App and Infra monitoring
+CloudFront: A global CDN
+RDS: Relational DB services
+
+---------------------------------------------------------------------------------------------------------------------------------
+AWS IAM
+--------------
+-IAM stands for Identity and Access Management
+-It is a service provided by Amazon Web Services (AWS) that helps you securely control access to AWS resources.
+-With IAM, you can manage WHO (individual users or systems) can access what resources in your AWS environment and what actions they can perform on those resources.
+-IAM helps you manage who can do what in your AWS account. It allows you to create and manage users, groups, roles, and permissions to ensure that only authorized individuals or applications have access to sensitive data or infrastructure.
+-It is  a global service. Cannot restrict it based on region.
+-IAM entities can do nothing in AWS until we grant them desired permissions.
+
+Who : User, Groups, Roles
+What : Read only Permissions
+Which : Resources: EC2, S3, RDS 
+Condition: Date, IP
+
+#IAM Terminologies
+------------------------------
+Users : IAM Users are entities that you create in your AWS account
+Groups : Collection of IAM users with similar set of requirements
+Permissions/Policies: IAM Policies are JSON documents that define permissions. They specify what actions are allowed or denied on specific AWS resources.
+MFA : Multi Factor Authentication, MFA adds an extra layer of security by requiring users to provide a second form of authentication
+Roles: IAM Roles are used to define a set of permissions that can be assumed by trusted entities, such as IAM users
+Root Account:
+
+#Real life example:
+----------------------------
+I. Create Users:
+
+You create IAM users for each individual employee (e.g., Alice, Bob, and Carol). Each user gets a unique username and password, or access keys, for programmatic access.
+
+II. Create Groups:
+
+You create two groups: one for developers and one for admins.
+Developer Group: Developers only need access to EC2 instances and S3 buckets for development purposes, so you create a policy that grants them read-write access to S3 and full access to EC2.
+Admin Group: Admins need full access to all AWS services. You assign a policy that gives them AdministratorAccess to all resources.
+
+III. Assign Permissions:
+
+Alice is a developer, so you add her to the Developer Group. Bob is an admin, so you add him to the Admin Group.
+Carol, who is a business analyst, only needs read-only access to certain data in S3. You create a custom policy for her that grants read-only access to the company's S3 bucket and attach it to her IAM user.
+
+III. Use Roles for EC2:
+
+You launch an EC2 instance that needs to access data stored in S3. Instead of embedding access keys inside the EC2 instance, you create an IAM role with the necessary S3 permissions and assign that role to the EC2 instance. This ensures the instance can access the data securely.
+
+IV. Enable MFA:
+
+For added security, you enable multi-factor authentication (MFA) for Alice and Bob, ensuring that even if their passwords are compromised, unauthorized access is prevented.
+
+Add User(s) -> Create Group -> Assign User(s) to Group -> Create Policy -> Assign Policy Group -> User can access based on his permissions
+
+#IAM Policies:
+---------------------
+-A policy is  a document that defines permissions, specifying what actions are allowed or denied on AWS resources.
+- Policies are written in JSON (JavaScript Object Not Notation) format and can be attached to IAM users, groups, or roles to manage access control.
+- IAM policies determine what a user, group, or role is allowed to do within AWS
+
+##Types:
+-------------
+1.Managed Policies : reusable
+	1.1. AWS managed Policies: we can't edit these policies and are read only.
+	1.2. Customer managed Policies: created using JSON document.
+2.Inline Policies : directly attached to single user, group or role.
+
+-Policies are written in JSON.
+
+1.Effect : whether the policy allows or denies access
+2.Action: the list of actions that are allowed or denied by policy
+3.Resource: list of resources on which actions can occur
+4.Condition(optional): circumstances under which the policy grants permission
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::my-bucket/*"
+    }
+  ]
+}
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::my-bucket/*"
+    }
+  ]
+}
+
+*-> All
+If these 2 policies are attached with the same user then it will DENY that permission.
+DENY always OVERRIDES ALLOW
+
+#Key Concepts of IAM Policies
+--------------------------------------------
+1.Action:
+
+-Actions specifies what a user is allowed or not allowed to do.
+- For example, an action might be to s3:PutObject (upload an object to an S3 bucket), ec2:RunInstances (launch an EC2 instance).
+-<service-prefix>:<operation>
+s3:GetObject -> allows reading objects from an S3 Bucket
+ec2:DescribeInstances -> allows listing EC2 instances.
+
+2.Resource:
+
+-It specifies what the action applies to.
+-arn:aws:<service>:<region>:<account-id>:<resource-type>/<resource-id>
+-arn:aws:s3::my-bucket/* -> refers to all objects within the my-bucket S3 bucket
+-arn:aws:ec2:us-west-1:12324:instance/* -> refers to all EC2 instances in specific AWS region(us-west-1)
+arn-> Amazon Resource Name
+aws: Refers to the AWS partition.
+ec2: This specifies that the resource is an EC2 instance.
+us-west-1: This indicates the region where the EC2 instances are located — specifically, US West (Northern California) region.
+12324: This is the AWS account ID. Each AWS account has a unique 12-digit account number.
+instance: This refers to the resource type, which in this case is an EC2 instance.
+*/ (Wildcard)**: This wildcard * means all instances in the specified region and account, not just one particular instance.
+-ARN (Amazon Resource Name) is a unique identifier used by AWS to refer to specific resources within your AWS account, across regions, and within AWS services. 
+- ARNs are globally unique
+
+3.Effect:
+
+-It determines whether the actions are allowed or denied.
+
+"Allow": The action is permitted.
+"Deny": The action is explicitly denied.
+
+If there are conflicting permissions (for example, one policy allows an action, and another denies it), "Deny" takes precedence over "Allow".
+
+4.Condition:
+
+Conditions are optional and specify constraints on when a policy is applied. For example, you could restrict access to certain resources only if the request comes from a specific IP address or during certain hours.
+
+ex:
+"Condition": {
+  "IpAddress": {"aws:SourceIp": "192.168.1.0/24"}
+}
+This condition ensures that a user can only perform an action if the request is from an IP address in the 192.168.1.0/24 range.
+
+
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Action": "s3:GetObject",
+      "Resource": "arn:aws:s3:::my-bucket/*"
+    }
+  ]
+}
+
+The policy allows a user to get objects (s3:GetObject) from any object in the my-bucket S3 bucket.
+
+#IAM ROLE:
+-------------------
+-IAM Role in AWS (Identity and Access Management) is a set of permissions that define what actions are allowed or denied by entities (users, services, or applications) interacting with AWS resources.
+-Unlike IAM users, roles are not associated with a specific person or entity, but rather can be assumed by different entities, such as other AWS services or IAM users.
+-IAM roles are typically used when temporary access to AWS resources is required or when you need to grant AWS services or applications permission to interact with other AWS resources on your behalf.
+
+--------------------------------------------------------------------------------------------------------------------------------
+							EC2
+							------
+-Stands for Elastic Compute Cloud
+-can be defined as Virtual Server
+-amazon calls this virtual server as EC2 Instance.
+-launched in 2006
+- It allows users to rent virtual machines (VMs) in the cloud, which are called instances.
+-These instances can run applications, store data, and perform other computing tasks, just like a physical server, but without the need to manage physical hardware.
+
+#BENEFITS:
+-------------------
+1.Scalability:
+2.Cost-Effective:
+3.Flexible
+4.Reliable
+5.Secure
+6.Inexpensive
+
+AMIs
+--------
+-Amazon Machine Images
+-AMI is a pre-configured template that contains the software configuration (e.g., operating system, application server, applications) needed to launch an Amazon EC2 instance.
+-Ex: amazon Linux AMIs , Microsoft windows server etc
+ 
+#Key concepts of AMIs:
+----------------------------------
+1.Base Image: An AMI includes the base operating system (OS) and any additional software packages, configurations, or data that you want to have available when an EC2 instance is launched.
+
+2.Customizable: You can create custom AMIs based on your specific requirements. For example, you might create an AMI that includes your application stack, database configuration, and security patches.
+
+3.Reusability: Once an AMI is created, you can use it to launch multiple EC2 instances, making it easy to replicate environments for development, testing, and production.
+
+4.Shareability: AMIs can be shared with other AWS accounts. You can share your AMIs publicly, or with specific AWS accounts, which can then use the same configuration to launch their EC2 instances.
+
+#TYPES:
+-------------
+1.Amazon-Provided AMIs
+
+-AWS provides a set of pre-configured, ready-to-use AMIs with popular operating systems (like Amazon Linux, Ubuntu, Windows, Red Hat, etc.).
+
+2.Marketplace AMIs
+
+-AWS Marketplace offers third-party AMIs that come pre-configured with specific applications or software stacks. These could include
+
+3.Custom AMIs
+
+-You can create your own custom AMIs based on the specific needs of your application or environment.
+
+4.Community AMIs
+
+-These are AMIs shared by the community, which may include specialized configurations or pre-installed applications. 
+
+#How AMIs Works:
+----------------------------
+-When you launch an EC2 instance, you choose an AMI to use as the base for that instance. The AMI is copied into your AWS account, and the instance is created using the configuration defined by the AMI.
+
+EC2 Instance Families/Types
+-------------------------------------------
+I. General Purpose: T1,M5,M4
+II. Compute Optimized: C5,C4
+III. Memory Optimized: R4,X1,X1e
+IV. Storage Optimized:H1,I3
+V. Accelerated Computing:P3,G3
+
+-One instance type can have multiple configurations, example:
+t2.micro,t2.small,t2.medium,t2.larges
+
+I.GENERAL PURPOSE (T family and M family)
+---------------------------------------------------------------------
+-These instances provide a balance of compute, memory, and networking resources and are ideal for a variety of workloads.
+
+II.COMPUTE OPTIMIZED (C family)
+-------------------------------------------------------
+-Compute-optimized instances provide a high level of CPU performance for compute-bound applications, such as batch processing, high-performance web servers, and scientific modeling.
+
+III.MEMORY OPTIMIZED (R family and X family and Z family)
+---------------------------------------------------------------------------------------------
+-Memory-optimized instances provide more RAM relative to the number of CPU cores and are ideal for memory-intensive applications like in-memory databases, real-time big data analytics, and high-performance databases.
+
+IV.STORAGE OPTIMIZED (I family and D family and H family)
+---------------------------------------------------------------------------------------------
+-Storage optimized instances are designed for workloads that require high storage throughput and low-latency access to large amounts of data.
+-These instances are ideal for applications such as NoSQL databases, data warehousing, and log processing.
+
+V.ACCELERATED COMPUTING (P family and G family)
+------------------------------------------------------------------------------------
+-These instances are designed for workloads that require specialized hardware acceleration, such as machine learning (ML), artificial intelligence (AI), and high-performance graphics rendering.
+
+#Instance Size Variations:
+-------------------------------------
+-Each EC2 instance family comes with different sizes (e.g., nano, micro, small, medium, large, xlarge, 2xlarge, etc.), allowing you to choose the right amount of CPU, memory, and storage for your workload.
+-For example, the t3.micro is the smallest instance in the T3 family, while the c5.18xlarge is one of the largest in the C5 family.
+
+For general-purpose workloads, choose T or M families: Test/Dev servers
+For compute-heavy applications, choose C family: batch processing, scientific computing
+For memory-heavy workloads, choose R, X, or Z families : in memory db, big data proc.
+For storage-intensive tasks, choose I, D, or H families: noSQL dbs, large scale data warehouse.
+For AI, ML, and GPU-based workloads, choose P, G, or Inf families.
+
+EBS
+--------
+-Elastic block store
+-It is a service provided by AWS that offers scalable, persistent block-level storage for Amazon EC2 instances.
+- EBS provides virtual hard drives that EC2 instances can use to store data such as files, applications, or even system configurations.
+-At any point in time, a specific EBS volume can be attached to one EC2 instance only but many EBS volumes can be attached to single EC2 instance.
+
+#EBS SNAPSHOTS:
+------------------------------
+Snapshot = A point in time backup
+-each snapshot contains all info needed to restore your data to a new EBS volume.
+-can be created from attached or unattached volumes.
+-A snapshot is stored in AWS S3.
+-Can be shared across different accounts.
+-can be copied to different regions.
+-Deleting a snapshot of a volume has no effect on the volume.
+-reverse is also true.
+-Incremental snapshot means that only the blocks on the device that have changed after your last snapshot are saved in the new snapshot.
+-Incremental snapshot helps us to not make a complete backup of entire data after 1st snapshot.
+-Even though snapshots are saved incrementally, the snapshot deletion process is designed so that you need to retain only the most recent snapshot in order to restore the volume.
+
+SECURITY GROUPS
+-------------------------------
+-virtual firewall to server.
+-it can control traffic going in or comin out of your EC2 instance.
+-you can add rules to security group to allow traffic to or from the instance.
+-It acts as a set of rules that determine which traffic is allowed or denied to and from your EC2 instance.
+-at the time of launching EC2 instance you can select the default security group or create your own.
+-Security Groups are stateful, meaning that if you allow inbound traffic, the corresponding outbound response is automatically allowed, even if no explicit outbound rule exists.
+
+-every ec2 instance must have at least 1 security group.
+-max 5 security group are allowed 
+-one Security group can have maximum of 50 rules.
+-once the updated rules are saved, the change takes place immediately.
+
+
+
