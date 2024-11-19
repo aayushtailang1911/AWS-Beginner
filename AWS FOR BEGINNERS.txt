@@ -342,5 +342,90 @@ SECURITY GROUPS
 -one Security group can have maximum of 50 rules.
 -once the updated rules are saved, the change takes place immediately.
 
+---------------------------------------------------------------------------------------------------------------------------------
+						AMAZON S3
+						------------------
+-Stands for Simple Storage Service
+-Amazon S3 (Simple Storage Service) is an object storage service provided by AWS that allows you to store and retrieve any amount of data at any time
+-Cloud based storage service.
+-has unlimited storage
+-highly reliable
+-can be used alone or in combination with other services
+
+#Where we cannot use S3
+------------------------------------
+-installing DB
+-installing OS
+-installing any other program viz web server, FTP etc
+-running program that requires server side processing(PHP,Java,.net)
+ 
+REASON: S3 is  an object storage NOT a block storage service.
+-for OS,DB installation use Amazon EBS.
+
+#S3 Buckets and Objects
+------------------------------------
+
+##BUCKET
+-----------------
+-It is a logical container for organizing your files in S3. Similar to folder.
+-Bucket name is globally unique. This allows your bucket to be used as a URL that can be accessed publicly.
+-Bucket name : 3 to 63 characters long, can contain only lower case characters, numbers, periods, dashes.
+-Example: my-bucket-name20
+-no maximum bucket size limit.
+-You can have multiple buckets in your AWS account
+
+##OBJECT
+----------------
+-Objects are the files and their associated metadata stored in an S3 bucket.
+-Every object is uniquely identified within a bucket by a key (which is the object's name) and a version ID
+-objects are stored in buckets
+-S3 store objects(files) Each object consists of: Data, Metadata, Key, version
+
+-Data: The actual content (e.g., image, video, file).cat.jpg, report.pdf, video.mp4, log.txt.
+-Metadata: Information about the object, such as file size, creation date, and custom metadata.
+Example of system metadata: LastModified, Content-Type.
+Example of user-defined metadata: Author: JohnDoe, Project: Marketing.
+
+-Key: A unique identifier for the object within the bucket (like a file name).
+images/cat.jpg, videos/holiday/video.mp4,
+-Version (optional): If versioning is enabled, objects can have multiple versions.
+versionID=3b3bf93a17d
+
+-minimum size of single object = 0 byte and max = 5TB
+-can store as many objects as we want and perform read, write and delete operations on that objects.
+-largest object that can be uploaded in single put is 5GB
+-Large objects can be uploaded in parts using the Multipart Upload feature, which allows you to upload objects in smaller chunks and then combine them into a single object once the upload is complete.
+
+TO ACCESS S3 OBJECT : 
+
+-You can access an S3 object using its URL (Uniform Resource Locator), which is based on the S3 object’s key and the bucket name.
+
+https://<bucket-name>.s3.<region>.amazonaws.com/<object-key>
+https://my-bucket.s3.us-east-1.amazonaws.com/images/cat.jpg
+
+#KEY FEATURES OF S3
+-------------------------------------
+-Highly durable 11 9s 99.999999999
+-availability 4 9s 99.99
+ -Supports versioning, object life cycle mgmt.
+-uses https end points 
+-is secures - can use encryption.
+
+#S3 Data Consistency Model
+------------------------------------------
+-S3 is an example of distributed system.
+-To achieve high availability it stores multiple copies of data across multiple servers within AWS data centers.
+-If you UPLOAD a new object (i.e. PUT request is successful) to S3 it is immediately visible.
+-But if you UPDATE an existing object it may take some time to reflect the MODIFIED object.
+-S3 provides READ-AFTER-WRITE CONSISTENCY for PUTs(i.e. upload) of new object.
+-S3 provides EVENTUAL CONSISTENCY for Overwrite PUTs(edits) and DELETES in all regions.
+
+READ-AFTER-WRITE CONSISTENCY:
+-When you upload a new object  you can immediately access the object using a GET request, and the most recent version of the object will be returned.
+
+EVENTUAL CONSISTENCY(previously)
+-when you perform a PUT or DELETE operation, the changes are immediately visible to all subsequent requests, with some delay or lag.
+
+-However, EVENTUAL CONSISTENCY behavior has been fully replaced with the current strong consistency model for both PUT and DELETE operations, meaning that such delays are no longer present.
 
 
