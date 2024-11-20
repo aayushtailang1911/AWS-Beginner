@@ -35,6 +35,7 @@
                 <th>Durability</th>
                 <th>Availability</th>
                 <th>Retrieval Time</th>
+		<th>Availability Zones</th>
                 <th>Ideal Use Case</th>
             </tr>
         </thead>
@@ -43,40 +44,36 @@
                 <td><strong>S3 Standard</strong></td>
                 <td>Frequently accessed</td>
                 <td>99.999999999% (11 nines)</td>
-                <td>99.99% over a given year</td>
+                <td>99.99% (4 nines)</td>
                 <td>Instant</td>
+		<td>Atleast 3 Zones</td>
                 <td>Active content like websites, apps, big data analytics</td>
             </tr>
-            <tr>
-                <td><strong>S3 Intelligent-Tiering</strong></td>
-                <td>Unpredictable access</td>
-                <td>99.999999999% (11 nines)</td>
-                <td>99.9% over a given year</td>
-                <td>Instant</td>
-                <td>Data with changing access patterns</td>
-            </tr>
-            <tr>
+             <tr>
                 <td><strong>S3 Standard-IA</strong></td>
                 <td>Infrequent access</td>
                 <td>99.999999999% (11 nines)</td>
-                <td>99.9% over a given year</td>
+                <td>99.9% (3 nines)</td>
                 <td>Instant</td>
+		<td>Atleast 3 Zones</td>
                 <td>Backup, disaster recovery, long-term data with occasional access</td>
             </tr>
             <tr>
                 <td><strong>S3 One Zone-IA</strong></td>
                 <td>Infrequent access</td>
                 <td>99.999999999% (11 nines)</td>
-                <td>99.5% over a given year</td>
+                <td>99.5% </td>
                 <td>Instant</td>
+		<td>only 1 Zone</td>
                 <td>Non-critical data that can be recreated if lost</td>
             </tr>
             <tr>
                 <td><strong>S3 Glacier</strong></td>
                 <td>Rarely accessed</td>
                 <td>99.999999999% (11 nines)</td>
-                <td>99.99% over a given year</td>
+                <td>N/A</td>
                 <td>Minutes to hours</td>
+		<td>Atleast 3 Zones</td>
                 <td>Archival storage, regulatory compliance</td>
             </tr>
             <tr>
@@ -85,17 +82,10 @@
                 <td>99.999999999% (11 nines)</td>
                 <td>99% over a given year</td>
                 <td>Hours (12-48 hrs)</td>
+		<td>Atleast 3 Zones</td>
                 <td>Long-term archival data storage</td>
             </tr>
-            <tr>
-                <td><strong>S3 Outposts</strong></td>
-                <td>On-premises (Hybrid)</td>
-                <td>99.999999999% (11 nines)</td>
-                <td>Varies depending on the Outpost configuration</td>
-                <td>Instant/Local</td>
-                <td>Hybrid workloads requiring data to stay on-premises</td>
-            </tr>
-        </tbody>
+            </tbody>
     </table>
 </body>
 </html>

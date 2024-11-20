@@ -428,4 +428,130 @@ EVENTUAL CONSISTENCY(previously)
 
 -However, EVENTUAL CONSISTENCY behavior has been fully replaced with the current strong consistency model for both PUT and DELETE operations, meaning that such delays are no longer present.
 
+#S3 STORAGE CLASSES
+-------------------------------------
+I.S3 Standard : for data that requires high durability, availability and performance for frequently accessed data.
+II.S3 Standard - IA : for data that is accessed less frequently but requires rapid access. Stores data in minimum  of 3 IA zone.
+III.S3 One Zone - IA : similar to Standard IA but stores data in a single IA zone 
+IV. Amazon Glacier : archiving solution for aws. Not available for real-time objects. We must restore achieved objects before we can access them. Access time can be from 1min to 12hrs.
+
+IA: Infrequent access
+
+V.S3 RRS: stands for Reduced Redundancy Storage.(Deprecated)
+
+SLA : Service Level Agreement
+
+#S3 PERMISSIONS:
+------------------------------
+-By default :
+	-All S3 resources (bucket, objects) are private.
+	-Only the resource owner can access the resource.
+
+-Permissions :
+	-The resource owner can grant access to bucket/objects through S3 resource based 	policies or IAM user policy.
+
+I. Resourced Based Policies : Bucket Policies and S3 Access Control list
+II. IAM User Policy : Managed policies and inline policies.
+
+I.1. Bucket Policies:
+----------------------------
+-Attached only to S3 Bucket.
+-Permissions defined in the policy is applied to all the objects of the bucket.
+-Policy can specify Allow or Deny actions.
+-Applied at bucket level.
+
+I.2. Access Control List(ACL):
+------------------------------------------
+-If you want to manage permissions on individual objects within a bucket
+-applied on objects themselves.
+
+---------------------------------------------------------------------------------------------------------------------------------
+							AWS DATABASE SERVICES
+							--------------------------------------------
+Services provided for different DBs:
+	RDBMS served through -> Amazon RDS
+	NoSQL served through  -> Amazon DynamoDB
+	In-memory Caching
+	Data-warehouse
+
+RDBMS:
+------------
+-tabular relationship
+ex: MySQL , Oracle , MS-SQL , MariaDB , PostgreSQL
+
+Amazon Aurora is a MySQL and PostgreSQL compatible relational DB built for cloud.
+
+NoSQL:
+-----------
+-not only SQL 
+-other than tabular relations
+-key-value pairs
+ex: MongoDB , Couchbase, Cassandra, Redis , RavenDB
+
+DynamoDB manages NoSQL data.
+
+#Amazon RDS
+---------------------
+-Amazon RDS is a fully managed relational database service provided by AWS.
+-It simplifies the setup, operation, and scaling of relational databases in the cloud.
+- It handles routine database tasks like backups, patch management, monitoring, and scaling, allowing you to focus on application development rather than database management.
+-it is cost effective
+-it offers resizable capacity
+
+Benefits:
+------------
+-Lower Administrative Burden
+-High Performance 
+-Scalable
+-Highly available and durable
+-Highly secure 
+-Cost effective
+
+Example:
+-------------
+Imagine you are running a blog site, and you need a relational database to store blog posts, user comments, and user details. You can use Amazon RDS to set up a MySQL database in the cloud. As your traffic grows, you can scale the database to handle more users by increasing compute capacity or storage, and you can set up read replicas to improve read performance.
+
+Types of Amazon RDS Instances:
+------------------------------------------------
+-Amazon RDS provides a selection of instance types optimized to fit different RDB use case.
+
+I. Standard DB Instances: These are general-purpose instances that provide a balanced set of resources for most applications.
+	-db.m4, db.m3, db.m1
+
+
+II. Burstable Performance Instances: These are cost-effective for applications with unpredictable workloads, providing a baseline performance with the ability to burst as needed.
+	-db.x1e,db.x1,db.r4,db.r3,db.m2
+
+
+III. Memory-Optimized Instances: These instances are ideal for workloads that require high-performance in-memory databases, such as high-performance analytics.
+	-db.t2
+
+-once the launch of DB Engine is successful the instance status is shown as AVAILABLE.
+-to connect we have to use Endpoint of the RDS DB instance.
+-Security Groups should allow connection at least from your IP.
+
+#Amazon DynamoDB
+-------------------------------
+-is a non-relationalDB (NoSQL)
+-fully managed, multi-region, multi master DB
+-very low latency
+-reliable performance at any scale.
+-built in security, backup and restore, in memory caching
+
+Benefits:
+------------
+-Performance at scale
+-fully managed as it is serverless db
+-enterprise ready
+
+Use Cases:
+---------------
+-Serverless web applications
+-Microservices data store.
+-mobile backends
+-gaming
+-IOT
+
+
+
 
