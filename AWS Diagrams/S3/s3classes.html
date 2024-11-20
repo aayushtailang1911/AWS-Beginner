@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amazon S3 Storage Classes Comparison</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        caption {
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Amazon S3 Storage Classes Comparison</h1>
+    <table>
+        <caption>Comparison of S3 Storage Classes</caption>
+        <thead>
+            <tr>
+                <th>Storage Class</th>
+                <th>Access Frequency</th>
+                <th>Durability</th>
+                <th>Availability</th>
+                <th>Retrieval Time</th>
+                <th>Ideal Use Case</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><strong>S3 Standard</strong></td>
+                <td>Frequently accessed</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99.99% over a given year</td>
+                <td>Instant</td>
+                <td>Active content like websites, apps, big data analytics</td>
+            </tr>
+            <tr>
+                <td><strong>S3 Intelligent-Tiering</strong></td>
+                <td>Unpredictable access</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99.9% over a given year</td>
+                <td>Instant</td>
+                <td>Data with changing access patterns</td>
+            </tr>
+            <tr>
+                <td><strong>S3 Standard-IA</strong></td>
+                <td>Infrequent access</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99.9% over a given year</td>
+                <td>Instant</td>
+                <td>Backup, disaster recovery, long-term data with occasional access</td>
+            </tr>
+            <tr>
+                <td><strong>S3 One Zone-IA</strong></td>
+                <td>Infrequent access</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99.5% over a given year</td>
+                <td>Instant</td>
+                <td>Non-critical data that can be recreated if lost</td>
+            </tr>
+            <tr>
+                <td><strong>S3 Glacier</strong></td>
+                <td>Rarely accessed</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99.99% over a given year</td>
+                <td>Minutes to hours</td>
+                <td>Archival storage, regulatory compliance</td>
+            </tr>
+            <tr>
+                <td><strong>S3 Glacier Deep Archive</strong></td>
+                <td>Very rarely accessed</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>99% over a given year</td>
+                <td>Hours (12-48 hrs)</td>
+                <td>Long-term archival data storage</td>
+            </tr>
+            <tr>
+                <td><strong>S3 Outposts</strong></td>
+                <td>On-premises (Hybrid)</td>
+                <td>99.999999999% (11 nines)</td>
+                <td>Varies depending on the Outpost configuration</td>
+                <td>Instant/Local</td>
+                <td>Hybrid workloads requiring data to stay on-premises</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
