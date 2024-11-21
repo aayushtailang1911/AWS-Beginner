@@ -552,6 +552,179 @@ Use Cases:
 -gaming
 -IOT
 
+---------------------------------------------------------------------------------------------------------------------------------
+							CLOUD WATCH
+							-------------------------
+-Amazon CloudWatch is a monitoring and observability service offered by Amazon Web Services (AWS).
+-it can monitor operational and performance metrics
+Cloud Watch = Monitoring + Management
 
+-we can set CloudWatch ALARMS, which can send notifications or automatically make changes to the resource.
+-CloudWatch Alarms can trigger actions in your AWS account.
+	ex: You want an email to be triggered when your bill is >100$
 
+-present under management tools.
+
+#Alarm States
+---------------------
+1.OK - the metric is within the defined threshold
+2.Alarm - the metric is outside the defined threshold
+3.Insufficient - The alarm has just started, the metric is not available, or not enough data is available for the metric to determine the alarm state.
+You may see Insufficient_Data when alarm is newly created.
+
+---------------------------------------------------------------------------------------------------------------------------------
+						ELASTIC LOAD BALANCING[ELB]
+						------------------------------------------------------
+-ELB divides the work that a single computer has to do among multiple computers
+(Horizontal Scaling)
+-Automatically distributes incoming application traffic across multiple EC2 instances(ie servers)
+-it can distribute your application traffic in a single AZ or across multiple AZs.
+-microservice arch. available
+
+TYPES:
+-----------
+I. Application LB - HTTP and HTTPS traffic, microservices and containers
+II. Network LB - operates at layer 4
+III. Classic LB - basic load balancing
+
+#ARCHITECTURE
+----------------------------
+-We have aws cloud , and at a particular region there is VPC(Virtual private cloud) inside this VPC we have 2 EC2 instances and we have 1 Application LB.
+-when different users try to request data which is there in amazon EC2 the ALB distribute the request to either of the 2 EC2s.
+
+---------------------------------------------------------------------------------------------------------------------------------
+						EC2 AUTO SCALING
+						--------------------------------
+-Amazon EC2 Auto Scaling is a service that automatically adjusts the number of Amazon EC2 instances in your application’s architecture based on the current demand for resources.
+-helps to maintain the right size required for infrastructure.
+-enables you to automatically expand or shrink your server infra based on the application traffic pattern.
+
+Scale Out(or HORIZONTAL SCALING) : INCREASE the number of servers when there's an increase in traffic. ex we have 2 EC2 instances but desired is 3 then auto scaling will add 1 more instance to match the desired no.
+
+Scale In : when the demand is decreased , DECREASE the number of servers.
+ex we are having 3 running instances but desired is 2 then auto scaling will terminate one of the running instance.
+
+#Auto Scaling Components:
+---------------------------------------
+I.Groups:
+
+-An Auto Scaling group defines the boundaries within which EC2 instances can be launched and terminated based on scaling policies.
+-You specify the minimum, maximum, and desired number of instances within the Auto Scaling group.
+-The Auto Scaling group automatically adjusts the number of EC2 instances based on traffic demand and scaling policies.
+
+II.Launch Configurations:
+
+-Launch Configuration or Launch Template defines the settings for the instances that will be launched by EC2 Auto Scaling. It includes instance types, Amazon Machine Images (AMIs), security groups, and key pairs.
+-Group uses a launch config as a template for its EC2 instances.
+
+III. Scaling Plans:
+
+-Scaling Policies/Plans are rules that define when and how Auto Scaling should scale your EC2 instances.
+-Dynamic Scaling adjusts the number of instances based on metrics like CPU utilization, memory usage, or request count.
+-Predictive(Scheduled) Scaling uses historical data to predict future traffic patterns and proactively adjust capacity to meet expected demand.
+
+---------------------------------------------------------------------------------------------------------------------------------
+							AMAZON ROUTE 53
+							-------------------------------
+
+-DNS server are addressed at TCP port 53
+-Amazon Route 53 is a scalable and highly available Domain Name System (DNS) web service provided by Amazon Web Services (AWS).
+-It is designed to route end-user requests to various endpoints (like web servers, load balancers, or other AWS resources) based on DNS queries.
+
+-DNS -> phone book of internet
+-DNS translates domain name to IP address
+
+-Route 53 functions as a DNS service to translate human-readable domain names (like www.example.com) into IP addresses that machines use to identify each other on the network (like 192.0.2.1).
+
+#HOSTED ZONE
+-------------------------
+-A Hosted Zone in Amazon Route 53 is a container that holds information about how you want to route traffic for a specific domain name.
+-It is a collection of resource record set hosted by Amazon Route 53.
+
+##DNS Records:
+
+I.A Record (Address Record): Maps a domain name to an IP address.
+II.NS Record: Points to the authoritative name servers for the domain.
+III.SOA records contain metadata about the hosted zone (e.g., the administrator’s contact information and the time to live (TTL) for cached data). It is default record.
+
+-first delete the record set then delete the hosted zones.
+
+#ROUTING POLICIES
+----------------------------------
+I. Simple Routing
+-------------------------
+Description: The simplest type of routing, where Route 53 returns a single record value (such as an IP address) for a given domain. It doesn’t take into account factors like load balancing or geographic location.
+
+Use case: If you only need to direct traffic to a single resource, like a single EC2 instance or a web server.
+
+Example: If you have a domain like example.com, a simple A record might route traffic to one specific server with IP address 192.0.2.1.
+
+II.Weighted Routing
+-----------------------------
+Description: Weighted routing allows you to route a percentage of traffic to different resources. You can assign weights to different records, and Route 53 will route traffic based on the weight distribution you specify.
+
+Use case: Useful for load balancing or distributing traffic across multiple resources, or testing new versions of your application (canary deployments).
+
+Example: If you have two web servers, one for testing and one for production, you could route 80% of traffic to the production server and 20% to the testing server.
+
+How it works:
+
+If you have two records:
+Server 1 (Weight = 80)
+Server 2 (Weight = 20)
+80% of traffic will go to Server 1, and 20% to Server 2.
+
+III.Latency-Based Routing
+--------------------------------------
+Description: Latency-based routing helps you direct traffic to the AWS region that provides the lowest latency for the user. Route 53 evaluates which region offers the quickest response time based on the user's location and routes the traffic accordingly.
+
+Use case: Ideal for global applications where you want to ensure that users are directed to the AWS region with the best performance.
+
+Example: If you have web servers in the US and Europe, Route 53 will send users from the US to the US server and users from Europe to the European server, reducing response time.
+
+IV. Failover Routing
+------------------------------
+Description: Failover routing helps you maintain high availability by routing traffic to a backup resource when the primary resource becomes unavailable. You define a primary record and a secondary (failover) record. Route 53 monitors the health of your resources, and if the primary resource fails health checks, traffic will be routed to the failover resource.
+
+Use case: To implement disaster recovery or high-availability solutions. This ensures that your users can still access your website or application even if one resource fails.
+
+Example: If your primary web server becomes unavailable, traffic will be automatically redirected to a backup server.
+
+V. Geolocation Routing
+---------------------------------
+Description: Geolocation routing allows you to route traffic based on the geographic location of the user’s request (e.g., country, continent, or specific region). This is useful if you want to customize the user experience based on their location or comply with local laws and regulations.
+
+Use case: If you have different versions of your website for different countries or regions (e.g., localized content, language preferences).
+
+Example: Route 53 can route users in the US to a US-based server and users in Japan to a Japan-based server.
+
+VI. Geoproximity Routing
+-------------------------------------
+Description: Geoproximity routing allows you to route traffic based on the geographic location of users and your resources. You can also adjust the bias, which influences how much traffic is directed to a particular resource based on its proximity to the user.
+
+Use case: This is useful for directing users to resources that are geographically closer and more optimal for their region, with some flexibility in how much traffic you want to route to different resources.
+
+Example: You have web servers in both New York and London, and you want users in North America to mostly reach the New York server but still allow some traffic to go to London based on proximity and server load.
+
+VII. Multivalue Answer Routing
+----------------------------------------------
+Description: Multivalue answer routing allows you to return multiple records in response to a single DNS query. Unlike weighted routing, it doesn’t assign specific percentages to different resources. Instead, it simply returns up to eight healthy records. The client then picks one of these records to send their request to.
+
+Use case: Useful for load balancing and increasing the availability of your application by returning multiple IP addresses for a domain.
+
+Example: If you have several web servers, you can configure Route 53 to return multiple A records for www.example.com, so users can connect to any of the available servers.
+
+---------------------------------------------------------------------------------------------------------------------------------
+							AWS LAMBDA
+							----------------------
+-It is core of Amazon's SERVERLESS COMPUTE PLATFORM.
+
+SERVERLESS != Absence of server
+
+Serverless compute allows to build and run applications and services without thinking about servers. 
+
+-AWS lambda lets you run code without us provisioning/managing servers.
+-You pay only for the compute time we consume - there is no charge when code is not running.
+-we just need to upload our code and lambda takes care of everything required to run and scale our code with high availability.
+-We can set up our code to automatically trigger from other AWS services or call it directly from any web/mobile app.
 

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Routing Policy Summary Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Routing Policy Summary Table</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Routing Policy</th>
+            <th>Use Case</th>
+            <th>How it Works</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><strong>Simple Routing</strong></td>
+            <td>Directs traffic to a single resource.</td>
+            <td>Single IP address or server.</td>
+        </tr>
+        <tr>
+            <td><strong>Weighted Routing</strong></td>
+            <td>Distribute traffic across multiple resources with specific weight.</td>
+            <td>Routes traffic based on assigned weights.</td>
+        </tr>
+        <tr>
+            <td><strong>Latency-Based Routing</strong></td>
+            <td>Directs users to the region with the lowest latency.</td>
+            <td>Routes traffic to the lowest latency region.</td>
+        </tr>
+        <tr>
+            <td><strong>Geolocation Routing</strong></td>
+            <td>Routes traffic based on the user’s geographic location.</td>
+            <td>Routes traffic to a specific region or country.</td>
+        </tr>
+        <tr>
+            <td><strong>Geoproximity Routing</strong></td>
+            <td>Routes traffic based on both geographic location and proximity to resources.</td>
+            <td>Routes traffic with optional bias toward certain locations.</td>
+        </tr>
+        <tr>
+            <td><strong>Failover Routing</strong></td>
+            <td>Routes traffic to backup resources when primary resources fail.</td>
+            <td>Routes traffic to failover resources based on health checks.</td>
+        </tr>
+        <tr>
+            <td><strong>Multivalue Answer Routing</strong></td>
+            <td>Routes traffic to multiple healthy records.</td>
+            <td>Returns multiple IP addresses for clients to choose from.</td>
+        </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
